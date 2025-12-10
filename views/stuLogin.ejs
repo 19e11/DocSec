@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Login | DocSec</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card: rgba(15, 23, 42, 0.95);
+      --border: rgba(148, 163, 184, 0.5);
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-xl: 20px;
+      --shadow: 0 18px 50px rgba(15, 23, 42, 0.98);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(56, 189, 248, 0.16), transparent 55%),
+        radial-gradient(circle at bottom, rgba(129, 140, 248, 0.2), transparent 55%),
+        #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text);
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      box-shadow: var(--shadow);
+      padding: 18px 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 10% 0, rgba(56, 189, 248, 0.18), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.25), transparent 55%);
+      opacity: 0.9;
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .title h1 {
+      font-size: 20px;
+      letter-spacing: 0.03em;
+    }
+    .title small {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    p.desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .field {
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+    .input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      outline: none;
+      font-size: 12px;
+      transition: border 0.18s ease-out, box-shadow 0.18s ease-out, background 0.18s ease-out;
+    }
+    .input:focus {
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.55);
+      background: rgba(15, 23, 42, 0.98);
+    }
+    .helper {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .remember-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      margin-bottom: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .checkbox input {
+      width: 13px;
+      height: 13px;
+      border-radius: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+    }
+    .link {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 11px;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+    .primary-btn {
+      width: 100%;
+      border-radius: 999px;
+      padding: 9px 10px;
+      border: 1px solid rgba(56, 189, 248, 0.9);
+      background: linear-gradient(135deg, #0ea5e9, #4f46e5);
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 18px 40px rgba(37, 99, 235, 0.9);
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+      margin-top: 6px;
+    }
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 50px rgba(37, 99, 235, 1);
+    }
+    .divider {
+      margin: 10px 0;
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      position: relative;
+    }
+    .divider::before,
+    .divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 32%;
+      height: 1px;
+      background: rgba(30, 41, 59, 1);
+    }
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+    .bottom-text {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 6px;
+    }
+    .pill-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      font-size: 10px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-inner">
+      <div class="title">
+        <div>
+          <h1>Student Login</h1>
+          <small>Access all PDFs shared with your class.</small>
+        </div>
+        <span class="badge">Student</span>
+      </div>
+
+      <p class="desc">
+        Use your enrollment number and password given by your institution to view
+        notes, assignments, and exam PDFs.
+      </p>
+
+      <form action="/stu/login" method="POST">
+        <div class="field">
+          <label for="enroll">Enrollment Number</label>
+          <input
+            id="enroll"
+            type="text"
+            name="enroll"
+            class="input"
+            placeholder="e.g., 23BCS001"
+            required
+          />
+          <p class="helper">Make sure there are no spaces or typos.</p>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            name="pass"
+            class="input"
+            placeholder="Your secure password"
+            required
+          />
+        </div>
+
+        <div class="remember-row">
+          <label class="checkbox">
+            <input type="checkbox" />
+            <span>Remember this device</span>
+          </label>
+          <!-- (You can wire this to "forgot password" later) -->
+          <a href="#" class="link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="primary-btn">
+          Continue to dashboard
+          <span>↗</span>
+        </button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <p class="bottom-text">
+        New here?
+        <a href="/stu/regi" class="link">Create a student account</a>
+      </p>
+
+      <div class="pill-row">
+        <span class="pill">Tip: Open exam PDFs first.</span>
+        <span class="pill">Your teacher can see if you opened them 😉</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

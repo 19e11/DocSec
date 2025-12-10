@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Professor Dashboard | DocSec</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card: rgba(15, 23, 42, 0.95);
+      --border: rgba(148, 163, 184, 0.55);
+      --accent: #6366f1;
+      --accent-soft: rgba(79, 70, 229, 0.18);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-xl: 20px;
+      --radius-lg: 14px;
+      --shadow: 0 22px 70px rgba(15, 23, 42, 0.98);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(129, 140, 248, 0.25), transparent 55%),
+        radial-gradient(circle at bottom, rgba(37, 99, 235, 0.25), transparent 55%),
+        #020617;
+      color: var(--text);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 16px;
+    }
+    .layout {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 14px;
+    }
+    .sidebar {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.97), rgba(15, 23, 42, 0.9));
+      padding: 16px 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 20% 10%, #6366f1, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 18px 45px rgba(79, 70, 229, 0.95);
+    }
+    .brand-text span:first-child {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .brand-text span:last-child {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .nav-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .nav a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-decoration: none;
+      font-size: 12px;
+      color: var(--muted);
+      border-radius: var(--radius-lg);
+      padding: 7px 9px;
+      border: 1px solid transparent;
+      transition: background 0.18s ease-out, border 0.18s ease-out, color 0.18s ease-out;
+    }
+    .nav a.active,
+    .nav a:hover {
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.2), transparent 55%),
+                  rgba(15, 23, 42, 0.98);
+      border-color: rgba(99, 102, 241, 0.9);
+      color: var(--text);
+    }
+    .nav-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.95);
+    }
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .logout-btn {
+      margin-top: 8px;
+      width: 100%;
+      border-radius: 999px;
+      padding: 7px 8px;
+      border: 1px solid rgba(248, 113, 113, 0.85);
+      background: rgba(127, 29, 29, 0.75);
+      color: #fee2e2;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 0 16px 36px rgba(127, 29, 29, 0.95);
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+    }
+    .logout-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 46px rgba(127, 29, 29, 1);
+    }
+
+    .main {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.94));
+      box-shadow: var(--shadow);
+      padding: 16px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .header-row h1 {
+      font-size: 20px;
+    }
+    .header-row p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .badge-pill {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(99, 102, 241, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: #c7d2fe;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+      gap: 12px;
+    }
+    .card {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, 0.96);
+      background: rgba(15, 23, 42, 0.98);
+      padding: 12px 11px 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent 55%);
+      opacity: 0.85;
+      pointer-events: none;
+      filter: blur(18px);
+    }
+    .card-inner { position: relative; z-index: 1; }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .card-header h2 {
+      font-size: 14px;
+    }
+    .card-header small {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--muted);
+    }
+    form .field {
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+    .input,
+    .textarea,
+    .file-input {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      outline: none;
+      font-size: 12px;
+      transition: border 0.18s ease-out, box-shadow 0.18s ease-out, background 0.18s ease-out;
+    }
+    .input:focus,
+    .textarea:focus {
+      border-color: rgba(99, 102, 241, 0.9);
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.65);
+      background: rgba(15, 23, 42, 0.98);
+    }
+    .textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+    .helper {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .file-row {
+      margin-top: 6px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .file-pill {
+      border-radius: 12px;
+      border: 1px dashed rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 7px 9px;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .file-pill span.icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(99, 102, 241, 0.9);
+      background: rgba(99, 102, 241, 0.2);
+      font-size: 11px;
+    }
+    .primary-btn,
+    .secondary-btn {
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border 0.18s ease-out, background 0.18s ease-out;
+    }
+    .primary-btn {
+      border-color: rgba(99, 102, 241, 0.95);
+      background: linear-gradient(135deg, #6366f1, #0ea5e9);
+      color: #e5e7eb;
+      box-shadow: 0 18px 40px rgba(76, 81, 191, 0.95);
+    }
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    .list {
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+      max-height: 310px;
+      overflow: auto;
+    }
+    .pdf-item {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 0.96);
+      background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.18), transparent 55%),
+                  rgba(15, 23, 42, 0.98);
+      padding: 9px 9px 7px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border 0.18s ease-out;
+    }
+    .pdf-item:hover {
+      transform: translateY(-1px);
+      border-color: rgba(99, 102, 241, 0.9);
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.95);
+    }
+    .pdf-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .pdf-desc {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .pdf-url {
+      font-size: 10px;
+      color: #a5b4fc;
+      word-break: break-all;
+    }
+    .pdf-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+    .badge-soft {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.96);
+    }
+    .search {
+      margin-top: 4px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.96);
+      padding: 6px 9px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .search input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      flex: 1;
+      font-size: 12px;
+    }
+    .empty {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      border-radius: 14px;
+      border: 1px dashed rgba(51, 65, 85, 0.9);
+      padding: 14px 10px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { flex-direction: row; align-items: center; }
+      .nav, .nav-title, .sidebar-footer { display: none; }
+    }
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: minmax(0, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">P</div>
+        <div class="brand-text">
+          <span>Prof. <%= user.fullname %></span>
+          <span>Teacher dashboard</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="nav-title">Overview</p>
+        <ul class="nav">
+          <li>
+            <a href="#" class="active">
+              <span>PDF uploads</span>
+              <span class="nav-badge">Current</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span>Engagement insights</span>
+              <span class="nav-badge">Soon</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <div>Upload PDFs once. Students see them instantly.</div>
+        <form action="/prof/logout" method="GET">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="header-row">
+        <div>
+          <h1>Your PDF control panel</h1>
+          <p>Upload notes, assignments, and exam PDFs for your classes.</p>
+        </div>
+        <span class="badge-pill">Professor dashboard</span>
+      </div>
+
+      <div class="grid">
+        <!-- Upload card -->
+        <section class="card">
+          <div class="card-inner">
+            <div class="card-header">
+              <div>
+                <h2>Upload new PDF</h2>
+                <small>Share fresh notes or exam material in a few clicks.</small>
+              </div>
+              <span class="tag">Drag & drop support (later)</span>
+            </div>
+
+            <form action="/pdfs/upload" method="POST" enctype="multipart/form-data">
+              <div class="field">
+                <label for="title">Title</label>
+                <input
+                  id="title"
+                  type="text"
+                  name="title"
+                  class="input"
+                  placeholder="e.g., Unit 3 – Derivatives notes"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="description">Short description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  class="textarea"
+                  placeholder="Explain what this PDF contains or what students must do with it."
+                ></textarea>
+                <p class="helper">
+                  Example: “Read pages 1–4 and solve Q3, Q5 for tomorrow’s class.”
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="file">Select PDF file</label>
+                <input
+                  id="file"
+                  type="file"
+                  name="file"
+                  class="file-input"
+                  accept="application/pdf"
+                  required
+                />
+                <div class="file-row">
+                  <div class="file-pill">
+                    <span class="icon">PDF</span>
+                    <span>Max size depends on your backend config.</span>
+                  </div>
+                  <span class="helper">Only PDF files are supported in this prototype.</span>
+                </div>
+              </div>
+
+              <div style="margin-top: 10px; display: flex; gap: 8px; justify-content: flex-end;">
+                <button type="button" class="secondary-btn">
+                  Save as draft (UI)
+                </button>
+                <button type="submit" class="primary-btn">
+                  Upload & get link
+                  <span>↗</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- List card -->
+        <section class="card">
+          <div class="card-inner">
+            <div class="card-header">
+              <div>
+                <h2>Your uploaded PDFs</h2>
+                <small>Copy links or share them directly with students.</small>
+              </div>
+              <span class="tag">Auto-sorted by latest first</span>
+            </div>
+
+            <div class="search">
+              <span>🔍</span>
+              <input
+                id="pdfSearch"
+                type="text"
+                placeholder="Search within your uploaded PDFs..."
+              />
+            </div>
+
+            <% if (pdfs.length === 0) { %>
+              <div class="empty">
+                No PDFs uploaded yet. Once you upload notes, assignments or exam papers,
+                they will appear here with their shareable URL.
+              </div>
+            <% } else { %>
+              <div class="list" id="pdfList">
+                <% pdfs.forEach(pdf => { %>
+                  <article class="pdf-item" data-title="<%= (pdf.title || '') + ' ' + (pdf.description || '') %>">
+                    <h3 class="pdf-title"><%= pdf.title %></h3>
+
+                    <% if (pdf.description) { %>
+                      <p class="pdf-desc"><%= pdf.description %></p>
+                    <% } else { %>
+                      <p class="pdf-desc">No description provided.</p>
+                    <% } %>
+
+                    <% if (pdf.fileUrl) { %>
+                      <p class="pdf-url"><%= pdf.fileUrl %></p>
+                    <% } %>
+
+                    <div class="pdf-footer">
+                      <span class="badge-soft">
+                        Share this URL on WhatsApp / Classroom for quick access.
+                      </span>
+                      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <% if (pdf.fileUrl) { %>
+                          <button
+                            type="button"
+                            class="secondary-btn"
+                            onclick="copyPdfUrl('<%= pdf.fileUrl %>')"
+                          >
+                            Copy link
+                          </button>
+                          <a href="<%= pdf.fileUrl %>" target="_blank" class="secondary-btn">
+                            Open
+                            <span>↗</span>
+                          </a>
+                        <% } %>
+                      </div>
+                    </div>
+                  </article>
+                <% }) %>
+              </div>
+            <% } %>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Filter PDFs client-side
+    const pdfSearch = document.getElementById('pdfSearch');
+    const pdfList = document.getElementById('pdfList');
+
+    if (pdfSearch && pdfList) {
+      pdfSearch.addEventListener('input', () => {
+        const query = pdfSearch.value.toLowerCase();
+        const items = pdfList.querySelectorAll('.pdf-item');
+        items.forEach(item => {
+          const text = item.dataset.title.toLowerCase();
+          item.style.display = text.includes(query) ? '' : 'none';
+        });
+      });
+    }
+
+    // Copy URL helper
+    function copyPdfUrl(url) {
+      navigator.clipboard.writeText(url)
+        .then(() => {
+          alert('PDF link copied to clipboard. Share it with your students.');
+        })
+        .catch(() => {
+          alert('Unable to copy link automatically. Please copy it manually.');
+        });
+    }
+  </script>
+</body>
+</html>

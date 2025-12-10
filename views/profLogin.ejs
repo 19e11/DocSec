@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Professor Login | DocSec</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card: rgba(15, 23, 42, 0.96);
+      --border: rgba(148, 163, 184, 0.6);
+      --accent: #6366f1;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-xl: 20px;
+      --shadow: 0 18px 55px rgba(15, 23, 42, 0.98);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(129, 140, 248, 0.25), transparent 55%),
+        radial-gradient(circle at bottom, rgba(37, 99, 235, 0.2), transparent 55%),
+        #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text);
+    }
+    .card {
+      width: 100%;
+      max-width: 430px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: linear-gradient(150deg, rgba(15, 23, 42, 0.97), rgba(15, 23, 42, 0.9));
+      box-shadow: var(--shadow);
+      padding: 18px 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(129, 140, 248, 0.25), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.25), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+      filter: blur(20px);
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 20px;
+      letter-spacing: 0.04em;
+    }
+    .sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .badge {
+      border-radius: 999px;
+      border: 1px solid rgba(99, 102, 241, 0.8);
+      background: rgba(15, 23, 42, 0.95);
+      padding: 3px 9px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+    .field {
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+    }
+    .input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      outline: none;
+      font-size: 12px;
+      transition: border 0.18s ease-out, box-shadow 0.18s ease-out, background 0.18s ease-out;
+    }
+    .input:focus {
+      border-color: rgba(99, 102, 241, 0.9);
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.65);
+      background: rgba(15, 23, 42, 0.98);
+    }
+    .helper {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .primary-btn {
+      width: 100%;
+      border-radius: 999px;
+      padding: 9px 10px;
+      border: 1px solid rgba(99, 102, 241, 0.9);
+      background: linear-gradient(135deg, #6366f1, #0ea5e9);
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 18px 40px rgba(76, 81, 191, 0.9);
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+      margin-top: 10px;
+    }
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 50px rgba(76, 81, 191, 1);
+    }
+    .footer {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .footer span.accent {
+      color: #a5b4fc;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-inner">
+      <div class="header">
+        <div>
+          <h1>Professor Login</h1>
+          <p class="sub">Upload PDFs and track how students interact with them.</p>
+        </div>
+        <span class="badge">Professor</span>
+      </div>
+
+      <form action="/prof/login" method="POST">
+        <div class="field">
+          <label for="email">Academic Email</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            class="input"
+            placeholder="e.g., prof.sharma@college.edu"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            class="input"
+            placeholder="Your secure password"
+            required
+          />
+          <p class="helper">Use the login credentials provided by admin.</p>
+        </div>
+
+        <button type="submit" class="primary-btn">
+          Go to dashboard
+          <span>↗</span>
+        </button>
+      </form>
+
+      <div class="footer">
+        <span>Students will only see PDFs you share with their class.</span>
+        <span class="accent">You see open stats, they just see notes.</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
