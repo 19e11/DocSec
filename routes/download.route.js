@@ -14,11 +14,15 @@ router.get('/:postId', isStud, async (req,res)=>{
         const post = await postModel.findById(postId);
         if(!post) return res.send('error in dl');
 
-        const alreadyDownloaded = (student.downloaded || []).some(
+        
+        const alreadySeen = (student.downloaded || []).some(
             (id) => id.toString() === postId,
         );
 
-        if(alreadyDownloaded) return res.send("You already have this file");
+        if (!alreadySeen) {
+        await studentModel.findByIdAndUpdate(req.user._id, {
+            $addToSet : {downloaded: new mongoose.Types.ObjectId(postId)}
+        })} 
 
         await studentModel.findByIdAndUpdate(student._id, {
             $addToSet : {downloaded: new mongoose.Types.ObjectId(postId)}

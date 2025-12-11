@@ -38,12 +38,6 @@ router.post("/upload", isProf,upload.single("file"), async (req, res) => {
     });
 
     return res.redirect('/prof/dashBoard');
-    
-    // res.json({
-    //     message: "Uploaded Sucessfully!",
-    //     post : newPost,
-    //     ImageKit : {fileid : response.fileId, url: response.url}
-    // });
 
     } catch (error) {
        console.log("Error in Post route", error); 
